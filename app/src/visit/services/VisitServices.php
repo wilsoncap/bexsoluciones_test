@@ -13,12 +13,24 @@ class VisitServices{
 
 
     public function getVisitsAll(){
-       return $this->visitRepository->getVisitsAll();
+        try {
+            $data = $this->visitRepository->getVisitsAll();
+            return ApiResponse::success($data, 'Registros del sistema', 200); 
+            
+        } catch (\Throwable $th) {
+            return ApiResponse::error([], ['exception' => $th->getMessage()], 500);
+        }
     }
 
 
     public function getVisitId($id){
-       return $this->visitRepository->getVisitId($id);
+        try {
+            $register =  $this->visitRepository->getVisitId($id);
+            return ApiResponse::success($register, 'Registro del sistema', 200);
+        } catch (\Throwable $th) {
+            return ApiResponse::error([], ['exception' => $th->getMessage()], 500);
+        }
+       
     }
 
 
@@ -42,7 +54,7 @@ class VisitServices{
 
             $update =  $this->visitRepository->updateVisit($request->validated(), $visit);
             if ($update) {
-                return ApiResponse::success($visit, 'Visita registrada', 201);
+                return ApiResponse::success($visit, 'Visita actualizada', 200);
             }
 
             return ApiResponse::updateFailed();

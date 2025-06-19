@@ -1,10 +1,8 @@
-<template>
-  <div>{{ message }}</div>
-</template>
-
 <script setup>
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
+import LayoutAppBexSolition from '@/layouts/app/LayoutAppBexSolition.vue'
+
 
 const message = ref('Cargando...')
 
@@ -18,3 +16,10 @@ onMounted(() => {
     })
 })
 </script>
+
+<template>
+  <LayoutAppBexSolition />
+  <div>{{ message }}</div>
+</template>
+
+

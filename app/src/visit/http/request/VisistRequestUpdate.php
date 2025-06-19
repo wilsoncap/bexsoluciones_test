@@ -7,7 +7,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use App\src\utils\ApiResponse;
 use Illuminate\Contracts\Validation\Validator;
 
-class VisitRequest extends FormRequest
+class VisistRequestUpdate extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,11 +22,11 @@ class VisitRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
+     public function rules(): array
     {
         return [
             'name' => 'required|string|min:2|max:100',
-            'email' => 'required|email:rfc,dns|unique:visits,email',
+            'email' => 'required|email:rfc,dns',
             'latitude' => 'required|numeric|between:-90,90',
             'longitude' => 'required|numeric|between:-180,180',
         ];

@@ -5,8 +5,10 @@ namespace App\src\visit\http\controllers;
 use App\src\visit\models\Visit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\src\visit\http\request\VisistRequestUpdate;
 use App\src\visit\services\VisitServices;
 use App\src\visit\http\request\VisitRequest;
+use App\src\visit\http\request\VisitRequestUpdate;
 
 class VisitController extends Controller
 {
@@ -16,7 +18,7 @@ class VisitController extends Controller
      */
     public function index()
     {
-        return Visit::all();
+        return $this->visitService->getVisitsAll();
     }
 
     /**
@@ -38,9 +40,9 @@ class VisitController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Visit $visit, $id)
+    public function show($id)
     {
-        return Visit::findOrFail($id);
+        return $this->visitService->getVisitId($id);
     }
 
     /**
@@ -54,31 +56,16 @@ class VisitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Visit $visit)
+    public function update(VisistRequestUpdate $request, $id)
     {
-
-        $visit->update($request->validate([
-            'name' => 'required|string|min:2|max:100',
-            'email' => 'required|email|max:100',
-            'latitude' => 'required|numeric|between:-90,90',
-            'longitude' => 'required|numeric|between:-180,180',
-        ]));
-
-        return $visit;
+        return $this->visitService->updateVisit($request, $id);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Visit $id)
+    public function destroy($id)
     {
-
-        if (! $id) {
-            return response()->json(['message' => 'No existe'], 404);
-        }
-
-        $id->delete();
-        
-        return response()->json(['message' => 'Eliminado']);
+        return $this->visitService->deleteVisit($id);
     }
 }

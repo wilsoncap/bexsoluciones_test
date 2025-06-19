@@ -23,4 +23,13 @@ class ApiResponse
             'data' => $data
         ], $code);
     }
+
+    public static function updateFailed($data = [], $message = 'No se pudo actualizar', $code = 422)
+    {
+        return response()->json([
+            'status' => false,
+            'message' => $message,
+            'data' => $data
+        ], $code);
+    }
 }

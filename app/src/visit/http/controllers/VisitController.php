@@ -1,13 +1,16 @@
 <?php
 
-namespace App\src\visit\controllers;
+namespace App\src\visit\http\controllers;
 
 use App\src\visit\models\Visit;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\src\visit\services\VisitServices;
+use App\src\visit\http\request\VisitRequest;
 
 class VisitController extends Controller
 {
+    public function __construct(private VisitServices $visitService){}
     /**
      * Display a listing of the resource.
      */
@@ -27,17 +30,9 @@ class VisitController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(VisitRequest $request)
     {
-        //dd('estamos en el store');
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-
-        return Visit::create($data);
+        return $this->visitService->storeVisit($request);
     }
 
     /**
@@ -59,18 +54,15 @@ class VisitController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Visit $id)
+    public function update(Request $request, Visit $visit)
     {
-        $visit = Visit::findOrFail($id);
 
-        $data = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-        ]);
-
-        $visit->update($data);
+        $visit->update($request->validate([
+            'name' => 'required|string|min:2|max:100',
+            'email' => 'required|email|max:100',
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180',
+        ]));
 
         return $visit;
     }

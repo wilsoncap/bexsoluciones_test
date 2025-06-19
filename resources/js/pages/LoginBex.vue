@@ -1,29 +1,42 @@
 <script setup lang="ts">
-import InputError from '@/components/InputError.vue';
 import TextLink from '@/components/TextLink.vue';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
 import { LoaderCircle } from 'lucide-vue-next';
+import { reactive } from 'vue';
+import { ref } from 'vue';
+import axios from 'axios';
+import { router } from '@inertiajs/vue3';
 
 defineProps<{
     status?: string;
     canResetPassword: boolean;
 }>();
 
-const form = useForm({
-    email: '',
-    password: '',
-    remember: false,
+const form = reactive({
+  email: '',
+  password: '',
+  errors: {}
 });
 
+
 const submit = () => {
-    form.post(route('login'), {
-        onFinish: () => form.reset('password'),
-    });
+
+    console.log(form.email,form.password);
+        
+    axios.post('/api/v1/login', {
+        email: form.email,
+        password: form.password,
+    }).then((res: any) => {
+        localStorage.setItem('token', res.data.token);
+        axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
+        router.visit('/visits-data');
+    }).catch(() => {
+        alert('Login inválido');
+        form.password = '';
+    });// capturás lo que escribieron
 };
 </script>
 
@@ -50,7 +63,6 @@ const submit = () => {
                         v-model="form.email"
                         placeholder="email@example.com"
                     />
-                    <InputError :message="form.errors.email" />
                 </div>
 
                 <div class="grid gap-2">
@@ -69,13 +81,12 @@ const submit = () => {
                         v-model="form.password"
                         placeholder="Password"
                     />
-                    <InputError :message="form.errors.password" />
                 </div>
 
 
 
-                <Button variant="ghost" type="submit" class="mt-4 w-full bg-[#ff8103]" :tabindex="4" :disabled="form.processing">
-                    <LoaderCircle v-if="form.processing" class="h-4 w-4 animate-spin" />
+                <Button variant="ghost" type="submit" class="mt-4 w-full bg-[#ff8103]" :tabindex="4">
+                    <!-- <LoaderCircle  class="h-4 w-4 animate-spin" /> -->
                     Ingresar
                 </Button>
             </div>

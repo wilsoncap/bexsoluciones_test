@@ -15,5 +15,9 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/visits-data', function () {
+    return Inertia::render('Visits'); // o el nombre del componente Vue
+});
+
 require __DIR__.'/settings.php';
 require __DIR__.'/auth.php';

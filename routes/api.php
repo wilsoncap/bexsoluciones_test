@@ -10,3 +10,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::prefix('v1')->group(base_path('app/src/user/routes/v1/api.php'));
+Route::prefix('v1')->group(base_path('app/src/visit/routes/v1/api.php'));

@@ -1,16 +1,9 @@
 <script setup>
-import {onMounted } from 'vue'
+import {ref, reactive, onMounted } from 'vue'
 const props = defineProps({
   visits: Object
 });
 
-const form = reactive({
-  id: null,
-  name: '',
-  email: '',
-  latitude: '',
-  longitude: ''
-})
 
 const editing = ref(false)
 const feedback = ref('')
@@ -22,14 +15,6 @@ const notify = (message, type = 'success') => {
   setTimeout(() => feedback.value = '', 3000) // Se borra en 3s
 }
 
-const resetForm = () => {
-  form.id = null
-  form.name = ''
-  form.email = ''
-  form.latitude = ''
-  form.longitude = ''
-  editing.value = false
-}
 
 const submit = async () => {
   const url = editing.value ? `/api/v1/visits/${form.id}` : '/api/v1/visits'
@@ -88,52 +73,6 @@ const resetForm = () => {
   form.latitude = ''
   form.longitude = ''
   editing.value = false
-}
-
-const editing = ref(false)
-const feedback = ref('')
-const visits = ref([...props.visits])
-
-const editVisit = (visit) => {
-  Object.assign(form, visit)
-  editing.value = true
-}
-
-const submit = async () => {
-  const url = editing.value ? `/api/v1/visits/${form.id}` : '/api/v1/visits'
-  const method = editing.value ? 'put' : 'post'
-
-  try {
-    const res = await axios[method](url, { ...form })
-
-    if (res.data.status) {
-      notify(editing.value ? 'Visita actualizada' : 'Visita registrada', 'success')
-
-      if (editing.value) {
-        const i = visits.value.findIndex(v => v.id === form.id)
-        visits.value[i] = res.data.data
-      } else {
-        visits.value.push(res.data.data)
-      }
-
-      resetForm()
-    } else {
-      notify(res.data.message, 'error')
-    }
-  } catch {
-    notify('Error al guardar', 'error')
-  }
-}
-
-
-const deleteVisit = async (id) => {
-  try {
-    await axios.delete(`/api/v1/visits/${id}`)
-    visits.value = visits.value.filter(v => v.id !== id)
-    notify('Visita eliminada', 'success')
-  } catch {
-    notify('Error al eliminar', 'error')
-  }
 }
 
 </script>
@@ -224,26 +163,26 @@ const deleteVisit = async (id) => {
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
                                                     </tr> -->
-                                                    <tr v-for="visit in visits" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
-                                                    <td class="p-1 text-center">{{visit.name}}</td>
-                                                    <td class="p-1 text-center">{{ visit.email }}</td>
-                                                    <td class="p-1 text-center">{{ visit.latitude }}</td>
-                                                    <td class="p-1 text-center">{{ visit.longitude }}</td>
-                                                    <td class="p-3 text-center flex justify-center gap-1">
-                                                        <!-- <Link :href="``" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
-                                                        <!-- <Link :href="route('contact.edit', contac)" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
-                                                        <button 
-                                                            type="button" 
-                                                            class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
-                                                            Editar
-                                                        </button>
+                                                    <tr v-for="v in visits" :key="v.id" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
+                                                        <td class="p-1 text-center">{{v.name}}</td>
+                                                        <td class="p-1 text-center">{{ v.email }}</td>
+                                                        <td class="p-1 text-center">{{ v.latitude }}</td>
+                                                        <td class="p-1 text-center">{{ v.longitude }}</td>
+                                                        <td class="p-3 text-center flex justify-center gap-1">
+                                                            <button 
+                                                                type="button" 
+                                                                @click="editVisit(v)"
+                                                                class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                                Editar
+                                                            </button>
 
-                                                        <button 
-                                                            type="button" 
-                                                            class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
-                                                            Eliminar
-                                                        </button>
-                                                    </td>
+                                                            <button 
+                                                                type="button"
+                                                                @click="deleteVisit(v.id)" 
+                                                                class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                                Eliminar
+                                                            </button>
+                                                        </td>
                                                 </tr>
                                                                 
                                                 </tbody>

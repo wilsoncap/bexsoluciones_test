@@ -44,6 +44,8 @@ const submit = async () => {
 }
 
 const editVisit = (visit) => {
+  console.log('visit', visit);
+  
   Object.assign(form, visit)
   editing.value = true
 }
@@ -114,6 +116,7 @@ const resetForm = () => {
                                             <input 
                                                 type="text" 
                                                 placeholder="Ingrese la latitud" 
+                                                v-model="form.latitude"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -122,7 +125,8 @@ const resetForm = () => {
                                             <label for="" class="text-gray-700">Longitud</label>
                                             <input 
                                                 type="text" 
-                                                placeholder="Ingrese la longitud" 
+                                                placeholder="Ingrese la longitud"
+                                                v-model="form.longitude" 
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -172,7 +176,7 @@ const resetForm = () => {
                                                             <button 
                                                                 type="button" 
                                                                 @click="editVisit(v)"
-                                                                class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                                class="text-sm bg-blue-400 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
                                                                 Editar
                                                             </button>
 

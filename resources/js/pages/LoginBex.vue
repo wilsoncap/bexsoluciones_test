@@ -24,8 +24,6 @@ const form = reactive({
 
 const submit = () => {
 
-    console.log(form.email,form.password);
-        
     axios.post('/api/v1/login', {
         email: form.email,
         password: form.password,

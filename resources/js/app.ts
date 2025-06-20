@@ -7,6 +7,7 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
 import './bootstrap';
+import { Icon } from '@iconify/vue';
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
@@ -17,6 +18,7 @@ createInertiaApp({
     setup({ el, App, props, plugin }) {
         createApp({ render: () => h(App, props) })
             .use(plugin)
+            .component('Icon', Icon)
             .use(ZiggyVue)
             .mount(el);
     },

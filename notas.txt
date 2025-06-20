@@ -1,0 +1,12 @@
+<!-- <tr v-for="contac in contacts" class="border-b hover:bg-orange-100 bg-gray-100">
+        <td class="p-3 px-5">{{ contac.name }}</td>
+        <td class="p-3 px-5">{{ contac.phone }}</td>
+        <td class="p-3 px-5">{{ contac.privacity }}</td>
+        <td class="p-3 px-5">
+            <img class="h-16" :src="`/storage/${contac.avatar}`" alt="">
+        </td>
+        <td class="p-3 px-5 flex justify-end">
+            <Link :href="contac.edit_url" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link>
+            <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Delete</button>
+        </td>
+    </tr> -->

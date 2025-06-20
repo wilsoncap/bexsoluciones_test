@@ -2,6 +2,7 @@
 import { ref, onMounted } from 'vue'
 import axios from 'axios'
 import LayoutAppBexSolition from '@/layouts/app/LayoutAppBexSolition.vue'
+import Crud from '@/components/bexsolutions/Crud.vue'
 
 
 const message = ref('Cargando...')
@@ -18,8 +19,10 @@ onMounted(() => {
 </script>
 
 <template>
-  <LayoutAppBexSolition />
-  <div>{{ message }}</div>
+  <LayoutAppBexSolition >
+    <Crud />
+  </LayoutAppBexSolition>
+  
 </template>
 
 

@@ -1,9 +1,30 @@
 <script setup>
+    import { onMounted } from 'vue';
+    import L from 'leaflet';
+
+    const props = defineProps({
+    visits: Object
+    });
+
+    onMounted(() => {
+        const map = L.map('map').setView([6.25, -75.56], 12); // Centro inicial
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        props.visits.forEach(visit => {
+            const marker = L.marker([visit.latitude, visit.longitude]).addTo(map);
+            marker.bindPopup(`<b>${visit.name}</b><br>${visit.email}`);
+        });
+    });
+
+    
 </script>
 
 
 <template>
-    <h2>mapa</h2>
+    <div id="map" style="height: 80vh;"></div>
 </template>
 
 

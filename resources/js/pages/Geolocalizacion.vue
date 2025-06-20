@@ -6,6 +6,9 @@ import Mapa from '@/components/bexsolutions/Mapa.vue'
 
 
 const message = ref('Cargando...')
+const props = defineProps({
+  visits: Object
+});
 
 onMounted(() => {
   axios.get('/api/v1/visits-data')
@@ -20,7 +23,7 @@ onMounted(() => {
 
 <template>
   <LayoutAppBexSolition >
-    <Mapa />
+    <Mapa :visits="props.visits" />
   </LayoutAppBexSolition>
   
 </template>

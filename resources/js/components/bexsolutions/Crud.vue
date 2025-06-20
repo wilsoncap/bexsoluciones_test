@@ -20,10 +20,10 @@ onMounted(() => {
                                                     
                                     <div class="flex justify-around items-center">
                                         <div class="mt-7">
-                                            <label for="" class="text-gray-700">Nombres</label>
+                                            <label for="" class="text-gray-700">Cliente</label>
                                             <input 
                                                 type="text" 
-                                                placeholder="Ingrese el nombre" 
+                                                placeholder="Ingrese el cliente" 
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>

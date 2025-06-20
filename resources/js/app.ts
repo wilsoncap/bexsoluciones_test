@@ -8,6 +8,8 @@ import { ZiggyVue } from 'ziggy-js';
 import { initializeTheme } from './composables/useAppearance';
 import './bootstrap';
 import { Icon } from '@iconify/vue';
+import 'leaflet/dist/leaflet.css';
+
 
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';

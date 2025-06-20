@@ -1,13 +1,72 @@
 <script setup>
-import {onMounted } from 'vue'
+import {ref, reactive, onMounted } from 'vue'
 const props = defineProps({
   visits: Object
 });
 
-onMounted(() => {
-    console.log('visits en el crud:', props.visits
-    );
+const form = reactive({
+  id: null,
+  name: '',
+  email: '',
+  latitude: '',
+  longitude: ''
 })
+
+const resetForm = () => {
+  form.id = null
+  form.name = ''
+  form.email = ''
+  form.latitude = ''
+  form.longitude = ''
+  editing.value = false
+}
+
+const editing = ref(false)
+const feedback = ref('')
+const visits = ref([...props.visits])
+
+const editVisit = (visit) => {
+  Object.assign(form, visit)
+  editing.value = true
+}
+
+const submit = async () => {
+  const url = editing.value ? `/api/v1/visits/${form.id}` : '/api/v1/visits'
+  const method = editing.value ? 'put' : 'post'
+
+  try {
+    const res = await axios[method](url, { ...form })
+
+    if (res.data.status) {
+      notify(editing.value ? 'Visita actualizada' : 'Visita registrada', 'success')
+
+      if (editing.value) {
+        const i = visits.value.findIndex(v => v.id === form.id)
+        visits.value[i] = res.data.data
+      } else {
+        visits.value.push(res.data.data)
+      }
+
+      resetForm()
+    } else {
+      notify(res.data.message, 'error')
+    }
+  } catch {
+    notify('Error al guardar', 'error')
+  }
+}
+
+
+const deleteVisit = async (id) => {
+  try {
+    await axios.delete(`/api/v1/visits/${id}`)
+    visits.value = visits.value.filter(v => v.id !== id)
+    notify('Visita eliminada', 'success')
+  } catch {
+    notify('Error al eliminar', 'error')
+  }
+}
+
 </script>
 
 
@@ -24,6 +83,7 @@ onMounted(() => {
                                             <input 
                                                 type="text" 
                                                 placeholder="Ingrese el cliente" 
+                                                v-model="form.name"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -33,6 +93,7 @@ onMounted(() => {
                                             <input 
                                                 type="email" 
                                                 placeholder="Ingrese el email" 
+                                                v-model="form.email"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -41,7 +102,8 @@ onMounted(() => {
                                             <label for="" class="text-gray-700">Latitud</label>
                                             <input 
                                                 type="text" 
-                                                placeholder="Ingrese la latitud" 
+                                                placeholder="Ingrese la latitud"
+                                                v-model="form.latitude" 
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -50,7 +112,8 @@ onMounted(() => {
                                             <label for="" class="text-gray-700">Longitud</label>
                                             <input 
                                                 type="text" 
-                                                placeholder="Ingrese la longitud" 
+                                                placeholder="Ingrese la longitud"
+                                                v-model="form.longitude" 
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -58,7 +121,7 @@ onMounted(() => {
 
                                     <div class="mt-7 flex justify-center">
                                         <button class="bg-orange-500 w-60 py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                                            Registrar
+                                            {{ editing ? 'Actualizar' : 'Registrar' }}
                                         </button>
                                     </div>
                                 </form>
@@ -72,7 +135,7 @@ onMounted(() => {
                                             </h1>
                                         </div>
                                         <div class="px-3 py-1 flex justify-center">
-                                            <table class="w-full text-md bg-orange-400 shadow-md rounded-t-lg rounded-t-lg mb-4">
+                                            <table class="w-full text-md bg-black shadow-md rounded-t-lg rounded-t-lg mb-4">
                                                 <thead>
                                                     <tr class="">
                                                         <th class="text-center p-3 px-5 text-white">Nombre</th>
@@ -84,18 +147,11 @@ onMounted(() => {
                                                 </thead>
                                                 <tbody class="bg-gray-100 rounded-b-3xl">
                                                     
-                                                    <!-- <tr>
-                                                        <td class="text-center">wilson</td>
-                                                        <td class="text-center">wilson</td>
-                                                        <td class="text-center">wilson</td>
-                                                        <td class="text-center">wilson</td>
-                                                        <td class="text-center">wilson</td>
-                                                    </tr> -->
-                                                    <tr v-for="visit in visits" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
-                                                    <td class="p-1 text-center">{{visit.name}}</td>
-                                                    <td class="p-1 text-center">{{ visit.email }}</td>
-                                                    <td class="p-1 text-center">{{ visit.latitude }}</td>
-                                                    <td class="p-1 text-center">{{ visit.longitude }}</td>
+                                                    <tr v-for="v in visits" :key="v.id" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
+                                                    <td class="p-1 text-center">{{v.name}}</td>
+                                                    <td class="p-1 text-center">{{ v.email }}</td>
+                                                    <td class="p-1 text-center">{{ v.latitude }}</td>
+                                                    <td class="p-1 text-center">{{ v.longitude }}</td>
                                                     <td class="p-3 text-center flex justify-center gap-1">
                                                         <!-- <Link :href="``" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
                                                         <!-- <Link :href="route('contact.edit', contac)" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->

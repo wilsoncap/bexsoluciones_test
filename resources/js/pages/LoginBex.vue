@@ -40,7 +40,7 @@ const submit = () => {
 
 <template>
     
-    <AuthBase title="Login" description="Para entrar al sistema ingrese su email y password" class="bg-[#5a3d3d]">
+    <AuthBase title="Login" description="Para entrar al sistema ingrese su email y password" class="bg-[#a3a2a2]">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
@@ -50,7 +50,7 @@ const submit = () => {
         <form @submit.prevent="submit" class="flex flex-col gap-6">
             <div class="grid gap-6">
                 <div class="grid gap-2">
-                    <Label for="email" class="text-color-">Email</Label>
+                    <Label for="email" class="text-gray-800">Email</Label>
                     <Input
                         id="email"
                         type="email"
@@ -65,7 +65,7 @@ const submit = () => {
 
                 <div class="grid gap-2">
                     <div class="flex items-center justify-between">
-                        <Label for="password">Password</Label>
+                        <Label for="email" class="text-gray-800">Password</Label>
                         <TextLink v-if="canResetPassword" :href="route('password.request')" class="text-sm" :tabindex="5">
                             Forgot password?
                         </TextLink>

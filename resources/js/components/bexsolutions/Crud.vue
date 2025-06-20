@@ -1,8 +1,78 @@
 <script setup>
-import {onMounted } from 'vue'
+import { ref } from 'vue';
+import {onMounted, reactive } from 'vue'
 const props = defineProps({
   visits: Object
 });
+
+const form = reactive({
+  id: null,
+  name: '',
+  email: '',
+  latitude: '',
+  longitude: ''
+})
+
+const editing = ref(false)
+const feedback = ref('')
+const visits = ref([...props.visits])
+
+const notify = (message, type = 'success') => {
+  feedback.value = message
+  feedbackType.value = type
+  setTimeout(() => feedback.value = '', 3000) // Se borra en 3s
+}
+
+const resetForm = () => {
+  form.id = null
+  form.name = ''
+  form.email = ''
+  form.latitude = ''
+  form.longitude = ''
+  editing.value = false
+}
+
+const submit = async () => {
+  const url = editing.value ? `/api/v1/visits/${form.id}` : '/api/v1/visits'
+  const method = editing.value ? 'put' : 'post'
+
+  
+  try {
+    const res = await axios[method](url, { ...form })
+
+    if (res.data.status) {
+      notify(editing.value ? 'Visita actualizada' : 'Visita registrada', 'success')
+
+      if (editing.value) {
+        const i = visits.value.findIndex(v => v.id === form.id)
+        visits.value[i] = res.data.data
+      } else {
+        visits.value.push(res.data.data)
+      }
+
+      resetForm()
+    } else {
+      notify(res.data.message, 'error')
+    }
+  } catch {
+    notify('Error al guardar', 'error')
+  }
+}
+
+const editVisit = (visit) => {
+  Object.assign(form, visit)
+  editing.value = true
+}
+
+const deleteVisit = async (id) => {
+  try {
+    await axios.delete(`/api/v1/visits/${id}`)
+    visits.value = visits.value.filter(v => v.id !== id)
+    notify('Visita eliminada', 'success')
+  } catch {
+    notify('Error al eliminar', 'error')
+  }
+}
 
 onMounted(() => {
     console.log('visits en el crud:', props.visits
@@ -12,6 +82,9 @@ onMounted(() => {
 
 
 <template>
+    <div v-if="feedback" :class="feedbackType === 'success' ? 'text-green-600' : 'text-red-600'" class="mb-2">
+         {{ feedback }}
+    </div>
     <div class="font-sans">
                     <div class="flex justify-center  ">
                         <div class="w-full">
@@ -24,6 +97,7 @@ onMounted(() => {
                                             <input 
                                                 type="text" 
                                                 placeholder="Ingrese el cliente" 
+                                                v-model="form.name"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -33,6 +107,7 @@ onMounted(() => {
                                             <input 
                                                 type="email" 
                                                 placeholder="Ingrese el email" 
+                                                v-model="form.email"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -41,7 +116,8 @@ onMounted(() => {
                                             <label for="" class="text-gray-700">Latitud</label>
                                             <input 
                                                 type="text" 
-                                                placeholder="Ingrese la latitud" 
+                                                placeholder="Ingrese la latitud"
+                                                v-model="form.latitude"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -51,6 +127,7 @@ onMounted(() => {
                                             <input 
                                                 type="text" 
                                                 placeholder="Ingrese la longitud" 
+                                                v-model="form.longitude"
                                                 class=" p-2 w-full border-none bg-white h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0"
                                                 >
                                         </div>
@@ -58,7 +135,7 @@ onMounted(() => {
 
                                     <div class="mt-7 flex justify-center">
                                         <button class="bg-orange-500 w-60 py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
-                                            Registrar
+                                            {{ editing ? 'Actualizar' : 'Registrar' }}
                                         </button>
                                     </div>
                                 </form>
@@ -91,16 +168,25 @@ onMounted(() => {
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
                                                     </tr> -->
-                                                    <tr v-for="visit in visits" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
-                                                    <td class="p-1 text-center">{{visit.name}}</td>
-                                                    <td class="p-1 text-center">{{ visit.email }}</td>
-                                                    <td class="p-1 text-center">{{ visit.latitude }}</td>
-                                                    <td class="p-1 text-center">{{ visit.longitude }}</td>
+                                                    <tr v-for="v in visits" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
+                                                    <td class="p-1 text-center">{{v.name}}</td>
+                                                    <td class="p-1 text-center">{{ v.email }}</td>
+                                                    <td class="p-1 text-center">{{ v.latitude }}</td>
+                                                    <td class="p-1 text-center">{{ v.longitude }}</td>
                                                     <td class="p-3 text-center flex justify-center gap-1">
                                                         <!-- <Link :href="``" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
                                                         <!-- <Link :href="route('contact.edit', contac)" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
-                                                        <button type="button" class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</button>
-                                                        <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Eliminar</button>
+                                                        <button 
+                                                            type="button" 
+                                                            class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                            Editar
+                                                        </button>
+
+                                                        <button 
+                                                            type="button" 
+                                                            class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">
+                                                            Eliminar
+                                                        </button>
                                                     </td>
                                                 </tr>
                                                                 

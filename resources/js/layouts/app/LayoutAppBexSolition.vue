@@ -1,6 +1,5 @@
 <script setup>
 import Head from '@/components/bexsolutions/Head.vue'
-import { Input } from '@/components/ui/input';
 </script>
 
 

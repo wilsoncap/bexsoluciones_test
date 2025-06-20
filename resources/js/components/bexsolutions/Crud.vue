@@ -20,7 +20,7 @@
                                         </div>
                             
                                         <div class="mt-7">
-                                            <label for="" class="text-gray-700">Nombres</label>
+                                            <label for="" class="text-gray-700">Email</label>
                                             <input 
                                                 type="email" 
                                                 placeholder="Ingrese el email" 

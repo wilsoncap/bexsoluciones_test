@@ -15,8 +15,13 @@ Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/visits-data', function () {
+// Route::get('/visits-data', function () {
+Route::middleware('auth:sanctum')->get('/visits-data', function () {
     return Inertia::render('Visits'); // o el nombre del componente Vue
+});
+
+Route::middleware('auth:sanctum')->get('/mapa', function () {
+    return Inertia::render('Geolocalizacion'); // tu vista del mapa
 });
 
 require __DIR__.'/settings.php';

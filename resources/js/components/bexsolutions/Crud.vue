@@ -1,4 +1,13 @@
 <script setup>
+import {onMounted } from 'vue'
+const props = defineProps({
+  visits: Object
+});
+
+onMounted(() => {
+    console.log('visits en el crud:', props.visits
+    );
+})
 </script>
 
 
@@ -73,16 +82,28 @@
                                                         <th class="text-white">Acciones</th>
                                                     </tr>
                                                 </thead>
-                                                <tbody class="bg-gray-100">
+                                                <tbody class="bg-gray-100 rounded-b-3xl">
                                                     
-                                                    <tr>
+                                                    <!-- <tr>
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
                                                         <td class="text-center">wilson</td>
-                                                    </tr>
-                                                    
+                                                    </tr> -->
+                                                    <tr v-for="visit in visits" class="border-b-gray-950 hover:bg-orange-100 bg-gray-100">
+                                                    <td class="p-1 text-center">{{visit.name}}</td>
+                                                    <td class="p-1 text-center">{{ visit.email }}</td>
+                                                    <td class="p-1 text-center">{{ visit.latitude }}</td>
+                                                    <td class="p-1 text-center">{{ visit.longitude }}</td>
+                                                    <td class="p-3 text-center flex justify-center gap-1">
+                                                        <!-- <Link :href="``" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
+                                                        <!-- <Link :href="route('contact.edit', contac)" type="button" class="mr-3 text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</Link> -->
+                                                        <button type="button" class="text-sm bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Editar</button>
+                                                        <button type="button" class="text-sm bg-red-500 hover:bg-red-700 text-white py-1 px-2 rounded focus:outline-none focus:shadow-outline">Eliminar</button>
+                                                    </td>
+                                                </tr>
+                                                                
                                                 </tbody>
                                             </table>
                                         </div>

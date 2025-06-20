@@ -7,6 +7,10 @@ import Crud from '@/components/bexsolutions/Crud.vue'
 
 const message = ref('Cargando...')
 
+const props = defineProps({
+  visits: Array
+});
+
 onMounted(() => {
   axios.get('/api/v1/visits-data')
     .then(res => {
@@ -16,11 +20,14 @@ onMounted(() => {
       message.value = 'No autorizado'
     })
 })
+
+
+
 </script>
 
 <template>
   <LayoutAppBexSolition >
-    <Crud />
+    <Crud :visits="props.visits" />
   </LayoutAppBexSolition>
   
 </template>

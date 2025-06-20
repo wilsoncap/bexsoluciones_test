@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\src\visit\models\Visit;
 
 Route::get('/', function () {
     return Inertia::render('Welcome');
@@ -17,11 +18,13 @@ Route::get('dashboard', function () {
 
 // Route::get('/visits-data', function () {
 Route::middleware('auth:sanctum')->get('/visits-data', function () {
-    return Inertia::render('Visits'); // o el nombre del componente Vue
+    $visits = Visit::all();
+    return Inertia::render('Visits', compact('visits'));
 });
 
 Route::middleware('auth:sanctum')->get('/mapa', function () {
-    return Inertia::render('Geolocalizacion'); // tu vista del mapa
+    $visits = Visit::all();
+    return Inertia::render('Geolocalizacion', ['visits' => $visits]);
 });
 
 require __DIR__.'/settings.php';

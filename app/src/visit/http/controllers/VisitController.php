@@ -8,15 +8,18 @@ use App\Http\Controllers\Controller;
 use App\src\visit\http\request\VisistRequestUpdate;
 use App\src\visit\services\VisitServices;
 use App\src\visit\http\request\VisitRequest;
-use App\src\visit\http\request\VisitRequestUpdate;
+use Illuminate\Http\JsonResponse;
 
 class VisitController extends Controller
 {
     public function __construct(private VisitServices $visitService){}
     /**
-     * Display a listing of the resource.
+     * List all Visits
+     * 
+     * Endpoint para ver totas las visitas registradas en el sistema
+     * @return JsonResponse
      */
-    public function index()
+    public function index():JsonResponse
     {
         return $this->visitService->getVisitsAll();
     }
@@ -29,8 +32,17 @@ class VisitController extends Controller
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
+    /** 
+     * Creacion de una visita
+     * 
+     * Ednpoint para crear una visita
+     * 
+     * @param Visit $name
+     * @param Visit $email
+     * @param Visit $latitude
+     * @param Visit $longitude
+     * 
+     * @return JsonResponse
      */
     public function store(VisitRequest $request)
     {
@@ -38,7 +50,12 @@ class VisitController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Descripcion de la visita
+     * 
+     * Endpoint para ver mas en detalle una visita
+     * 
+     * @param Visit $id
+     * @return JsonResponse
      */
     public function show($id)
     {
@@ -53,16 +70,30 @@ class VisitController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
+    /** 
+     * Actualizacion de una visita
+     * 
+     * Ednpoint para actualizar una visita
+     * 
+     * @param Visit $name
+     * @param Visit $email
+     * @param Visit $latitude
+     * @param Visit $longitude
+     * 
+     * @return JsonResponse
      */
-    public function update(VisistRequestUpdate $request, $id)
+    public function update(VisistRequestUpdate $request, int $id)
     {
         return $this->visitService->updateVisit($request, $id);
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Eliminar una visita
+     * 
+     * Endpoint para eliminar una visita
+     * 
+     * @param Visit $id
+     * @return JsonResponse
      */
     public function destroy($id)
     {

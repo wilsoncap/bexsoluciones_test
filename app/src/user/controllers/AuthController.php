@@ -11,6 +11,9 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    /**
+     * @unauthenticated
+     */
     public function register(Request $request){
         try {
             $data = $request->validate([
@@ -19,7 +22,7 @@ class AuthController extends Controller
             'password' => 'required|string|confirmed|min:6',
         ]);
 
-        //dd('paso la valizadiocion');
+        ;
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
@@ -32,6 +35,9 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @unauthenticated
+     */
     public function login(Request $request){
         
          $request->validate([

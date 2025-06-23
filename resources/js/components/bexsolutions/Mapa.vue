@@ -24,7 +24,7 @@
 
 
 <template>
-    <div id="map" style="height: 80vh;"></div>
+    <div id="map" class="h-[85vh]"></div>
 </template>
 
 

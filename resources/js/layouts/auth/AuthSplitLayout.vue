@@ -14,27 +14,32 @@ defineProps<{
 
 <template>
     <div class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
-        <div class="relative h-full  flex-col bg-muted p-10 text-white lg:flex dark:border-r">
-            <div class="absolute inset-0 bg-black" />
-            <Link :href="route('home')" class="relative z-20 flex items-center text-lg font-medium">
-                <AppLogoIcon class="mr-2 size-8 fill-current text-white" />
-                {{ name }}
-            </Link>
-            <!-- <div v-if="quote" class="relative z-20 mt-auto bg-amber-300">
-                <blockquote class="space-y-2">
-                    <p class="text-lg">&ldquo;{{ quote.message }}&rdquo;</p>
-                    <footer class="text-sm text-neutral-300">{{ quote.author }}</footer>
-                </blockquote>
-            </div> -->
+        <div class="relative h-full  flex-col bg-muted text-white lg:flex dark:border-r">
+            <div class="h-full inset-0 bg-black flex justify-center items-center">
+                <img src="/images/LOGO.png" width="300" alt="logo" class="logo-float" />
+            </div>
         </div>
         <div class="lg:p-8">
             <div class="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
                 <div class="flex flex-col space-y-2 text-center">
-                    <h1 class="text-xl font-medium tracking-tight" v-if="title">{{ title }}</h1>
-                    <p class="text-sm text-muted-foreground" v-if="description">{{ description }}</p>
+                    <h1 class="text-3xl font-medium tracking-tight text-black" v-if="title">{{ title }}</h1>
+                    <p class="text-sm text-muted-foreground text-black" v-if="description">{{ description }}</p>
                 </div>
                 <slot />
             </div>
         </div>
     </div>
 </template>
+
+<style>
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-15px); }
+}
+
+.logo-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+</style>

@@ -4,9 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import AuthBase from '@/layouts/AuthLayout.vue';
-import { LoaderCircle } from 'lucide-vue-next';
 import { reactive } from 'vue';
-import { ref } from 'vue';
 import axios from 'axios';
 import { router } from '@inertiajs/vue3';
 
@@ -40,7 +38,7 @@ const submit = () => {
 
 <template>
     
-    <AuthBase title="Login" description="Para entrar al sistema ingrese su email y password" class="bg-[#a3a2a2]">
+    <AuthBase title="Login" description="Para entrar al sistema ingrese su email y password" class=" bg-[#ffffff]">
         <Head title="Log in" />
 
         <div v-if="status" class="mb-4 text-center text-sm font-medium text-green-600">
@@ -83,16 +81,12 @@ const submit = () => {
 
 
 
-                <Button variant="ghost" type="submit" class="mt-4 w-full bg-[#ff8103]" :tabindex="4">
+                <Button variant="ghost" type="submit" class="mt-4 w-full text-white bg-[#EF5825]" :tabindex="4">
                     <!-- <LoaderCircle  class="h-4 w-4 animate-spin" /> -->
                     Ingresar
                 </Button>
             </div>
 
-            <!-- <div class="text-center text-sm text-muted-foreground">
-                Don't have an account?
-                <TextLink :href="route('register')" :tabindex="5">Sign up</TextLink>
-            </div> -->
         </form>
     </AuthBase>
 </template>

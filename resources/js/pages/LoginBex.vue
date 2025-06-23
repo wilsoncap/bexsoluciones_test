@@ -83,7 +83,7 @@ const submit = () => {
 
 
 
-                <Button variant="ghost" type="submit" class="mt-4 w-full text-white bg-[#EF5825]" :tabindex="4">
+                <Button variant="ghost" type="submit" class="mt-4 w-full text-white bg-[#EF5825] hover:bg-[#76ef25]" :tabindex="4">
                     <!-- <LoaderCircle  class="h-4 w-4 animate-spin" /> -->
                     Ingresar
                 </Button>

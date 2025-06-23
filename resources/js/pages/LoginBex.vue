@@ -58,6 +58,7 @@ const submit = () => {
                         autocomplete="email"
                         v-model="form.email"
                         placeholder="email@example.com"
+                        class="bg-white text-gray-800 focus:ring-2 focus:ring-[#EF5825] focus:border-transparent border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-[#EF5825] dark:focus:border-transparent"
                     />
                 </div>
 
@@ -76,6 +77,7 @@ const submit = () => {
                         autocomplete="current-password"
                         v-model="form.password"
                         placeholder="Password"
+                        class="bg-white text-gray-800 focus:ring-2 focus:ring-[#EF5825] focus:border-transparent border-gray-300 rounded-md shadow-sm dark:bg-gray-700 dark:text-gray-200 dark:focus:ring-[#EF5825] dark:focus:border-transparent"
                     />
                 </div>
 

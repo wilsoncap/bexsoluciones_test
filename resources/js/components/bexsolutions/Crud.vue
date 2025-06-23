@@ -9,6 +9,7 @@ const editing = ref(false)
 const feedback = ref('')
 const feedbackType = ref('') // 'success' o 'error'
 const loading = ref(false)
+const errors = ref([])
 const visits = ref([...props.visits])
 
 const notify = (message, type = 'success') => {
@@ -25,7 +26,8 @@ const submit = async () => {
   loading.value = true
   try {
     const res = await axios[method](url, { ...form })
-
+    console.log('res', res);
+    
     if (res.data.status) {
       notify(editing.value ? 'Visita actualizada' : 'Visita registrada', 'success')
 
@@ -40,8 +42,21 @@ const submit = async () => {
     } else {
       notify(res.data.message, 'error')
     }
-  } catch {
-    notify('Error al guardar', 'error')
+  } catch(error) {
+      console.log('error', error.response.data);
+      if (error.response && error.response.status === 422) {
+      const allErrors = error.response.data.data
+      errors.value = Object.values(allErrors).flat()
+      const mensaje = error.response.data.message
+
+      notify(mensaje, 'error') // Mostrá mensaje general
+
+      // Si querés mostrar campo específico:
+      // notify(errors.email?.[0] || 'Datos inválidos', 'error')
+    } else {
+      errors.value = []
+      notify('Error al guardar', 'error')
+    }
   } finally {
     loading.value = false
   }
@@ -95,6 +110,10 @@ const resetForm = () => {
         class="mb-4 text-white px-4 py-3 rounded shadow transition duration-300 ease-in-out"
       >
          {{ feedback }}
+
+         <ul v-if="errors.length" class="mb-2 text-white">
+          <li v-for="(error, i) in errors" :key="i">{{ error }}</li>
+        </ul>
     </div>
 
     <div v-if="loading" class="flex justify-center my-2">

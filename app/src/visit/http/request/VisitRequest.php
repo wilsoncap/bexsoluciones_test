@@ -37,7 +37,7 @@ class VisitRequest extends FormRequest
         throw new HttpResponseException(
             ApiResponse::error(
                 data: $validator->errors(), // Pasa los errores de validación aquí
-                message: 'Los datos proporcionados son inválidos.',
+                message: 'Los datos proporcionados no son inválidos.',
                 code: 422 // El código de error estándar para validación fallida
             )
         ); // Código de estado HTTP 422 (Unprocessable Entity)

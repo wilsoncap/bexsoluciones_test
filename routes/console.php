@@ -7,6 +7,6 @@ Artisan::command('visit:store', function () {
     $this->call(\App\src\visit\console\comands\StoreVisit::class);
 });
 
-Artisan::command('visit:store', function () {
+Artisan::command('create:feature', function () {
     $this->call(\App\Console\Commands\MakeModule::class);
 });

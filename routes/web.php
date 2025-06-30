@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\src\visit\models\Visit;
@@ -25,6 +26,11 @@ Route::middleware('auth:sanctum')->get('/visits-data', function () {
 Route::middleware('auth:sanctum')->get('/mapa', function () {
     $visits = Visit::all();
     return Inertia::render('Geolocalizacion', ['visits' => $visits]);
+});
+
+Route::group([],function () {
+    Route::get('/products', [ProductController::class, '__invoke']);
+    // Add other product-related routes here
 });
 
 require __DIR__.'/settings.php';

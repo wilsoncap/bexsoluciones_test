@@ -14,7 +14,7 @@ const submitReview = async (productId) => {
   reviewContent.value = 'Generando reseña con IA... ⏳'
 
   try {
-    const response = await axios.post('/product-review', { product_id: productId })
+    const response = await axios.post('/api/v1/product-review', { product_id: productId })
     reviewContent.value = response.data.review || 'La IA no pudo generar una reseña en este momento.'
   } catch (error) {
     reviewContent.value = 'Ocurrió un error al contactar a la IA.'

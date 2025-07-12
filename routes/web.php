@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProductController;
+use App\src\Product\Http\Controllers\GraficController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\src\visit\models\Visit;
@@ -26,6 +27,11 @@ Route::middleware('auth:sanctum')->get('/visits-data', function () {
 Route::middleware('auth:sanctum')->get('/mapa', function () {
     $visits = Visit::all();
     return Inertia::render('Geolocalizacion', ['visits' => $visits]);
+});
+
+Route::group([],function () {
+    Route::get('/grafics', [GraficController::class, 'index']);
+    // Add other product-related routes here
 });
 
 Route::group([],function () {

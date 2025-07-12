@@ -12,9 +12,10 @@ Route::get('/user', function (Request $request) {
 
 Route::prefix('v1')->group(base_path('app/src/user/routes/v1/api.php'));
 Route::prefix('v1')->group(base_path('app/src/visit/routes/v1/api.php'));
+Route::prefix('v1')->group(base_path('app/src/Product/routes/v1/api.php'));
 
 
-Route::group([],function () {
-    Route::get('/products', [ProductController::class, '__invoke']);
-    // Add other product-related routes here
-});
+// Route::group([],function () {
+//     Route::get('/products', [ProductController::class, '__invoke']);
+//     // Add other product-related routes here
+// });
